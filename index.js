@@ -200,7 +200,10 @@ async function handleDashboard(req, res) {
 module.exports = async function cproxy(options) {
   const { port=5555, mongo='mongodb://localhost/cproxy' } = options;
 
-  await mongoose.connect(mongo, { useMongoClient: true });
+  await /* TODO: JSFIX could not patch the breaking change:
+  BREAKING CHANGE: mongoose.connect() returns a promise, removed MongooseThenable #5796
+  Suggested fix: Only relevant if you depend on the return value being a reference to the mongoose object. In that case, you need to modify the usages of the return value to get the mongoose object from somewhere else.*/
+  mongoose.connect(mongo, { useMongoClient: true });
 
   // start HTTP server with custom request handler callback function
   const server = Http.createServer(function httpUserRequest(req, res) {
